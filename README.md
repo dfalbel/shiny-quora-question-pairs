@@ -12,4 +12,4 @@ drive_download(as_id("https://drive.google.com/open?id=1t8gxe0C8IbN2XXa3qnChyPIY
 unzip("model-quora-question-pairs.zip")
 ```
 
-Tou can then click `Run Document` from ` app.Rmd`.
+You can then click `Run Document` from ` app.Rmd`.
