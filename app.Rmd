@@ -8,6 +8,7 @@ runtime: shiny
 
 ```{r global, include=FALSE}
 library(keras)
+library(shiny)
 library(flexdashboard)
 
 model <- load_model_hdf5("model-question-pairs.hdf5", compile = FALSE)
