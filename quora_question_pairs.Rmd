@@ -2,15 +2,16 @@
 title: "Quora Question Pairs"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
     vertical_layout: scroll
+    source_code: embed
+    theme: cosmo
 runtime: shiny_prerendered  
 ---
 
 ```{r setup, include=FALSE}
-# load packages
 library(keras)
 library(shiny)
+library(scales)
 library(flexdashboard)
 
 # function to download model file when necessary
@@ -43,41 +44,39 @@ predict_question_pairs <- function(model, tokenizer, q1, q2) {
 ```{r}
 textInput("q1", 
   label = "Question 1:",
-  value = "What is the future of deep learning?",
+  value = "What are the advantages of using Quora?",
   width = "100%"
 )
 textInput("q2", 
   label = "Question 2:",
-  value = "What does the future of deep learning look like?",
+  value = "What is the main benefit of Quora?",
   width = "100%"
 )
 ```
 
-
-### Results
+### Probability
 
 ```{r}
-gaugeOutput("gauge")
+valueBoxOutput("prob")
 ```
 
 ```{r, context="server"}
-probability <- reactive({
-  input$calculate
+probability <- debounce(millis = 500, reactive({
   predict_question_pairs(
     model, 
     tokenizer, 
     input$q1, 
     input$q2
   )
-})
-
-output$gauge <- debounce(millis = 500, renderGauge({
-  gauge(
-    round(probability()*100, 2), 
-    min = 0, 
-    max = 100, 
-    symbol = "%"
-  )
 }))
+
+output$prob <- renderValueBox({
+  valueBox(
+    percent(probability()),
+    icon = "fa-exchange",
+    color = "success",
+    "Probability of questions being duplicates"
+  )
+})
 ```
 
