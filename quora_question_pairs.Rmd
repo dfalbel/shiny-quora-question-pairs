@@ -3,7 +3,7 @@ title: "Quora Question Pairs"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    vertical_layout: scroll
+    vertical_layout: fill
 runtime: shiny_prerendered  
 ---
 
@@ -38,7 +38,7 @@ predict_question_pairs <- function(model, tokenizer, q1, q2) {
 }
 ```
 
-Row {data-height=300}
+Row {data-height=250}
 -----------------------------------------------------------------------------
 
 ### Questions
@@ -60,7 +60,7 @@ textInput("q2",
 ### Results
 
 ```{r}
-gaugeOutput("gauge", height = "300px")
+gaugeOutput("gauge")
 ```
 
 ```{r, context="server"}
