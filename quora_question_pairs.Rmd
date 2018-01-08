@@ -1,0 +1,86 @@
+---
+title: "Quora Question Pairs"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+runtime: shiny_prerendered  
+---
+
+```{r setup, include=FALSE}
+# load packages
+library(keras)
+library(shiny)
+library(flexdashboard)
+
+# function to download model file when necessary
+model_file <- function(file) {
+  base_url <- "https://s3.amazonaws.com/r-keras-models/quora-question-pairs"
+  if (!file.exists(file))
+    utils::download.file(file.path(base_url, file, fsep = "/"), file)
+  file
+}
+
+# load model and tokenizer objects
+model <- load_model_hdf5(model_file("model.hdf5"), compile = FALSE)
+tokenizer <- load_text_tokenizer(model_file("tokenizer"))
+
+# function to predict probability of questions being duplicates
+predict_question_pairs <- function(model, tokenizer, q1, q2) {
+
+  q1 <- texts_to_sequences(tokenizer, list(q1))
+  q2 <- texts_to_sequences(tokenizer, list(q2))
+  
+  q1 <- pad_sequences(q1, 20)
+  q2 <- pad_sequences(q2, 20)
+  
+  as.numeric(predict(model, list(q1, q2)))
+}
+```
+
+Row {data-height=300}
+-----------------------------------------------------------------------------
+
+### Questions
+
+```{r}
+textInput("q1", 
+  label = "Question 1:",
+  value = "What is the future of deep learning?",
+  width = "100%"
+)
+textInput("q2", 
+  label = "Question 2:",
+  value = "What does the future of deep learning look like?",
+  width = "100%"
+)
+```
+
+
+### Results
+
+```{r}
+gaugeOutput("gauge", height = "300px")
+```
+
+```{r, context="server"}
+probability <- reactive({
+  input$calculate
+  predict_question_pairs(
+    model, 
+    tokenizer, 
+    input$q1, 
+    input$q2
+  )
+})
+
+output$gauge <- debounce(millis = 500, renderGauge({
+  gauge(
+    round(probability()*100, 2), 
+    min = 0, 
+    max = 100, 
+    symbol = "%"
+  )
+}))
+```
+
