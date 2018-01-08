@@ -3,7 +3,7 @@ title: "Quora Question Pairs"
 output: 
   flexdashboard::flex_dashboard:
     vertical_layout: scroll
-    source_code: embed
+    source_code: https://github.com/dfalbel/shiny-quora-question-pairs
     theme: cosmo
 runtime: shiny_prerendered  
 ---
