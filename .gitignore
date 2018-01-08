@@ -5,3 +5,4 @@
 .httr-oauth
 model.hdf5
 tokenizer
+*.html
