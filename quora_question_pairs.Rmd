@@ -2,8 +2,8 @@
 title: "Quora Question Pairs"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
-    vertical_layout: fill
+    orientation: columns
+    vertical_layout: scroll
 runtime: shiny_prerendered  
 ---
 
@@ -37,9 +37,6 @@ predict_question_pairs <- function(model, tokenizer, q1, q2) {
   as.numeric(predict(model, list(q1, q2)))
 }
 ```
-
-Row {data-height=250}
------------------------------------------------------------------------------
 
 ### Questions
 
