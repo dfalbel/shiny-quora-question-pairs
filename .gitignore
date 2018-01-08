@@ -6,3 +6,4 @@
 model.hdf5
 tokenizer
 *.html
+rsconnect

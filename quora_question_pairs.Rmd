@@ -44,12 +44,12 @@ predict_question_pairs <- function(model, tokenizer, q1, q2) {
 ```{r}
 textInput("q1", 
   label = "Question 1:",
-  value = "What are the advantages of using Quora?",
+  value = "What is the main benefit of Quora?",
   width = "100%"
 )
 textInput("q2", 
   label = "Question 2:",
-  value = "What is the main benefit of Quora?",
+  value = "What are the advantages of using Quora?",
   width = "100%"
 )
 ```
